@@ -1,0 +1,102 @@
+
+
+spring:
+  application:
+    name: ad-serving-manage-web
+    version: 1.0.0-SNAPSHOT
+  redis:
+    database: 0
+    host: 192.168.137.200
+    lettuce:
+      pool:
+        max-active: 100
+        max-idle: 100
+        max-wait: -1
+        min-idle: 0
+    port: 6379
+    timeout: 30000
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.137.200:3306/ad_serving?autoReconnect=true&useCompression=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT%2b8
+    username: root
+    password: root
+    tomcat:
+      test-on-borrow: true
+    type: org.apache.tomcat.jdbc.pool.DataSource
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyComponentPathImpl
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        query:
+          plan_parameter_metadata_max_size: 16
+      org:
+        hibernate:
+          envers:
+            store_data_at_delete: true
+            audit_table_suffix: _audit_log
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    # sql日志打印
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:META-INF/mybatis/*.xml
+  type-aliases-package: com.bangdao.adserving.core.model.pojo
+
+track:
+  # 调用路径
+  url: http://monitor-platform-admin-new-test.leo.bangdao-tech.com/monitor-platform-admin
+
+server:
+  port: 9005
+
+common:
+  admin:
+    token:
+      # 令牌自定义标识
+      header: authorization
+      # 令牌秘钥
+      secret: abcdefghijklmnopqrstuvwxyz
+      # 令牌有效期（默认30分钟）
+      expireTime: 180
+    filter:
+      shiro:
+        # 是否开启shiro 默认开启
+        open: true
+      # 允许匿名访问的url
+      ignore: /api/authority/admin/login,/static/**,/info,/swagger-ui.html,/webjars/**,/swagger-resources/**,/v2/api-docs/**,/test,/ad-serving/block/list,/ad-serving/user/**
+
+default:
+  static:
+    path: ./config/static
+  oss:
+    url: http://oss.small-potato.club
+    id: yBKaYEZOCKuISd8T
+    secret: z4J1IMhEhT6DwW6PxUbwDVXmEoCBsY
+    bucketName: mkplat
+
+xxl:
+  job:
+    limit:
+      #定时发布最小时间间隔
+      deployLimit: 60000
+      #定时下线最小时间间隔
+      undeployLimit: 120000
+    admin:
+      addresses: http://travel-job-test.leo.bangdao-tech.com
+    accessToken:
+    executor:
+      appname: ad-serving-admin
+      jobGroupId: 5
+      address:
+      ip:
+      port: 9006
+      logpath: logs/
+      logretentiondays: 30
